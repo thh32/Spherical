@@ -114,7 +114,7 @@ while currentiter < iterations:
 			notneeded = call(bashCommand, shell=True)
 			bashCommand = 'bowtie2-build -f ' + currentfile + ' ' + 'Current_round_index' # Creates the bowtie index
 			notneeded = call(bashCommand, shell=True)
-			bashCommand = 'bowtie2 -f -N 1 --un Unaligned.fa -U ' + unalignedfile + '--al-gz /dev/null -x Current_round_index -S /dev/null' # Runs bowtie itself
+			bashCommand = 'bowtie2 -f -N 1 --un Unaligned.fa -U ' + unalignedfile + ' --al /dev/null -x Current_round_index -S /dev/null' # Runs bowtie itself
 			notneeded = call(bashCommand, shell=True)
 			unalignedfile = 'Unaligned.fa'
 			# Run bowtie code

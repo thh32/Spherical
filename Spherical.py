@@ -7,6 +7,7 @@ import argparse
 import numpy as np
 import subprocess
 import os
+from datetime import datetime
 
 
 
@@ -42,7 +43,7 @@ parser.add_argument('-align', action='store', default= '70', dest='alignmentrate
 parser.add_argument('-iter', action='store', default= '5', dest='iterations', help='Number of iterations before ending, default is 5.')
 parser.add_argument('-m', action='store_true', default=True, dest='merge_switch', help='Merges all contig files into a singluar assembly, default is true.')
 parser.add_argument('-k', action='store', default= '31', dest='kmer', help='Enter Kmer size of choice, default is 31.')
-parser.add_argument('-R', action='store', dest='RAM', help='Enter RAM available, no default')
+parser.add_argument('-R', action='store', dest='RAM', help='Enter fraction of file to be used as sub-sample e.g. if -R 3 is used 1 third of the reads will be used in the sub-sample, no default')
 
 args = parser.parse_args()
 
@@ -101,10 +102,6 @@ print "Using file;" , currentfile
 totalreads = 0
 
 
-for read in HTSeq.FastaReader(currentfile):
-	totalreads +=1
-
-print "Total number of reads; ", totalreads
 
 currentiter = 0
 
@@ -116,29 +113,28 @@ while currentiter < iterations:
 		break
 	else:
 		currentiter +=1
+		print "Starting sub-sampling; " + str(datetime.now())
 
 		# Subsample from current file
 		subsample = open('subsample.fa','w')
-		amountneeded = RAM * 170000 
 
-		print "Maximum subsampling size; ", amountneeded
-		count = 0
 		currentfasta = HTSeq.FastaReader(unalignedfile)
 		for read in currentfasta:
-			if count > amountneeded:
-				break
-			else:
+			if =random.random()%int(RAM) == 0:
 				subsample.write('>' + read.name + '\n')
 				subsample.write(read.seq + '\n')
-				count +=1
+			else:
+				continue
 
 
 		subsample.close()
 		currentfile = 'subsample.fa'
 		print "Subsampling completed."
-
+		
+		print "Ending sub-sampling; " + str(datetime.now())
 
 		# Run assembly
+		print "Starting Assembly; " + str(datetime.now())
 		if args.velvet_switch == True:
 			bashCommand = 'velveth out-dir ' + str(ksize) + ' -' + filetype + ' ' + currentfile + ' | cat >  Assembly_log'
 			notneeded = call(bashCommand, shell=True)
@@ -157,7 +153,7 @@ while currentiter < iterations:
 			print "not yet available"
 		print "Assembly complete."
 
-
+		print "Ending Assembly; " + str(datetime.now())
 
 		# Check if assembly produced anything
 
@@ -165,6 +161,7 @@ while currentiter < iterations:
 
 
 		# Run alignment
+		print "Starting Alignment; " + str(datetime.now())
 		if args.bowtie_switch == True:
 			contigfilename = OUTPUT + '.' + str(currentiter)  
 			bashCommand = 'mv out-dir/contigs.fa ' + contigfilename # Move file and rename so it isnt deleted
@@ -189,6 +186,7 @@ while currentiter < iterations:
 			# Run BWA code
 			print "Not yet available"
 		print "Alignment complete."
+		print "Ending Alignment; " + str(datetime.now())
 
 
 

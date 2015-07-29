@@ -121,6 +121,7 @@ while currentiter < iterations:
 		currentfasta = HTSeq.FastaReader(unalignedfile)
 		for read in currentfasta:
 			RAM = int(RAM) - 1
+			print RAM
 			random_num = random.randint(0,RAM)
 			if int(random_num % 5 ) == 0:
 				subsample.write('>' + read.name + '\n')

@@ -101,7 +101,8 @@ print "Using file;" , currentfile
 # Provide an initial count of the raw reads so we can work out the alignment rate
 totalreads = 0
 
-
+for read in HTSeq.FastaReader(currentfile):
+	totalreads += 1
 
 currentiter = 0
 

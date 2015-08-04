@@ -108,6 +108,7 @@ currentiter = 0
 
 unalignedfile = currentfile
 
+RAM = int(RAM) -1
 
 while currentiter < iterations:
 	if currentalignrate >= alignmentwanted:
@@ -120,7 +121,6 @@ while currentiter < iterations:
 		subsample = open('subsample.fa','w')
 
 		currentfasta = HTSeq.FastaReader(unalignedfile)
-		RAM = int(RAM) -1
 		#print RAM
 		for read in currentfasta:
 			random_num = random.randint(0,RAM)

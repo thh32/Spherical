@@ -1,16 +1,48 @@
 # Spherical
-Spherical is an iterative approach to large metagenome assemblies, designed for clusters where insufficient RAM is available for a straightforward assembly.
 
-
-For use of Spherical your assembler of choice (velvet, SOAPdenovo2 or ABySS) and aligner (Bowtie2, BWA) must be installed.
-
-Spherical is a pipeline that allows for easy production of high quality assemblies.
+Spherical is an iterative approach to assembling metagenomic datasets. Spherical has two uses; firstly the reducion of RAM usage as to allow metagenomic assemblies to be produced on computational infrastructure that would otherwise be insufficient, secondly Spherical allows for the assembly and study of low abundance varients otherwise hidden by the more common species.
 
 
 
-Spherical is written in python and requires a few python modules to be installed before use.
-The modules used by python that may not be standard include;
-numpy
-HTseq
+##Requirements
+- Python 2.7
+- Python modules;
+- -numpy
+- -HTSeq
+- Velvet
+- Bowtie2
+
+
+
+
+##Usage
+
+Once all dependancies are install and Spherical has been downloaded you can begin using Spherical from command line.
+
+The most basic use of Spherical is;
+```
+python Spherical.py -fasta -i $INPUT -velvet -bowtie2 -o $OUTPUT
+
+```
+
+###Options
+
+Full customisation of Spherical is possible using the commands below.
+
+| Option command| Description                                                                                              | Default |
+| ------------- | -------------------------------------------------------------------------------------------------------- | ------- |
+|-align $INT    | Identifies an alignment rate that must be obtained before Spherical stops producing iterations           | 70      |
+| -iter $INT    | States the number of iterations that must be produced                                                    | 5       |
+| -m            | A switch which activates the combination of all iterations assemblies at the end to produce a final file | NA      |
+| -k $INT       | Sets the Kmer size which should be used for each assembly                                                | 31      |
+| -R $INT       | States the fraction of the input which should be used in each iteration of assembly                      | NA      |
+| -limit        | A switch which prevents contigs smaller from 300bp from being produced                                   | NA      |
+| -fasta        | States that the input file is in FASTA input                                                             | -       |
+| -fastq        | States that the input file is in FASTQ input                                                             | -       |
+| -i  $FILE     | Identifies the input file                                                                                | -       |
+| -o $FILE      | Identifies string to be used for output file                                                             | -       |
+
+
+
 
 

@@ -5,13 +5,14 @@ Spherical is an iterative approach to assembling metagenomic datasets. Spherical
 
 
 ##Requirements
+
 - Python 2.7
-- Python modules;
-- -numpy
-- -HTSeq
 - Velvet
 - Bowtie2
 
+Python modules;
+- Numpy
+- HTSeq
 
 
 

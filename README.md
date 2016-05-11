@@ -34,14 +34,14 @@ Full customisation of Spherical is possible using the commands below.
 | ------------- | -------------------------------------------------------------------------------------------------------- | ------- |
 |-align $INT    | Identifies an alignment rate that must be obtained before Spherical stops producing iterations           | 70      |
 | -iter $INT    | States the number of iterations that must be produced                                                    | 5       |
-| -m            | A switch which activates the combination of all iterations assemblies at the end to produce a final file | NA      |
 | -k $INT       | Sets the Kmer size which should be used for each assembly                                                | 31      |
 | -R $INT       | States the fraction of the input which should be used in each iteration of assembly                      | NA      |
 | -limit        | A switch which prevents contigs smaller from 300bp from being produced                                   | NA      |
-| -fasta        | States that the input file is in FASTA input                                                             | -       |
-| -fastq        | States that the input file is in FASTQ input                                                             | -       |
-| -i  $FILE     | Identifies the input file                                                                                | -       |
-| -o $FILE      | Identifies string to be used for output file                                                             | -       |
+| -m            | A switch which activates the combination of all iterations assemblies at the end to produce a final file | NA      |
+| -fasta        | States that the input file is in FASTA input                                                             | NA      |
+| -fastq        | States that the input file is in FASTQ input                                                             | NA      |
+| -i  $FILE     | Identifies the input file                                                                                | NA      |
+| -o $FILE      | Identifies string to be used for output file                                                             | NA      |
 
 
 

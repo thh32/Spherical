@@ -7,7 +7,7 @@ import argparse
 import numpy as np
 import subprocess
 import os
-
+import sys
 
 
 parser = argparse.ArgumentParser() #simplifys the wording of using argparse as stated in the python tutorial
@@ -96,6 +96,7 @@ currentfile = newinput
 
 
 print "Using file;" , currentfile
+sys.stdout.flush()
 
 # Provide an initial count of the raw reads so we can work out the alignment rate
 totalreads = 0
@@ -115,6 +116,7 @@ while currentiter < iterations:
 	else:
 		currentiter +=1
 		print "Starting sub-sampling; " + str(datetime.now())
+		sys.stdout.flush()
 
 		# Subsample from current file
 		subsample = open('subsample.fa','w')
@@ -133,8 +135,10 @@ while currentiter < iterations:
 		subsample.close()
 		currentfile = 'subsample.fa'
 		print "Subsampling completed."
+		sys.stdout.flush()
 		
 		print "Ending sub-sampling; " + str(datetime.now())
+		sys.stdout.flush()
 
 		# Run assembly
 		print "Starting Assembly; " + str(datetime.now())
@@ -150,13 +154,18 @@ while currentiter < iterations:
 		elif args.soapdenovo_switch == True:
 			# Run soapdenovo code
 			print "Not yet available"
+			sys.stdout.flush()
 
 		elif args.abyss_switch == True:
 			# Run ABYSS code
 			print "not yet available"
+			sys.stdout.flush()
+
 		print "Assembly complete."
+		sys.stdout.flush()
 
 		print "Ending Assembly; " + str(datetime.now())
+		sys.stdout.flush()
 
 		# Check if assembly produced anything
 
@@ -165,13 +174,19 @@ while currentiter < iterations:
 
 		# Run alignment
 		print "Starting Alignment; " + str(datetime.now())
+		sys.stdout.flush()
+
 		if args.bowtie_switch == True:
 			contigfilename = OUTPUT + '.' + str(currentiter)  
 			bashCommand = 'mv out-dir/contigs.fa ' + contigfilename # Move file and rename so it isnt deleted
 			notneeded = call(bashCommand, shell=True)
 			if os.stat(contigfilename).st_size == 0:
 				print "Assembly failed to produce any contigs."
+				sys.stdout.flush()
+
 				print "Spherical will now exit."
+				sys.stdout.flush()
+
 				failed = True
 				bashCommand = 'rm ' + contigfilename
 				notneeded = call(bashCommand, shell=True)
@@ -188,7 +203,10 @@ while currentiter < iterations:
 			# Run BWA code
 			print "Not yet available"
 		print "Alignment complete."
+		sys.stdout.flush()
+
 		print "Ending Alignment; " + str(datetime.now())
+		sys.stdout.flush()
 
 
 
@@ -197,9 +215,12 @@ while currentiter < iterations:
 		for reaf in HTSeq.FastaReader(unalignedfile):
 			unalignedreads +=1
 		print 'Unaligned reads; ', unalignedreads
+		sys.stdout.flush()
 		alignmentrate = (totalreads - unalignedreads) / totalreads * 100
 		currentalignrate = alignmentrate
 		print 'Percentage alignment; ', alignmentrate
+		sys.stdout.flush()
+
 
 
 
@@ -227,6 +248,8 @@ if failedfirst == False:
 		print 'Standard deviation; ', np.std(listolengths)
 		print "Final alignment rate; ", alignmentrate
 		print '\n'
+		sys.stdout.flush()
+
 
 	# Provide final statistics on every round
 
@@ -247,10 +270,14 @@ if failedfirst == False:
 		print '75 percentile; ', np.percentile(listolengths,75)
 		print 'Standard deviation; ', np.std(listolengths)
 		print '\n'
+		sys.stdout.flush()
+
 
 else:
 	print "Spherical failed with no successful assembly produced."
 	print "Please try again with a different kmer size."
+	sys.stdout.flush()
+
 
 
 

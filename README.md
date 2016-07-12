@@ -26,6 +26,23 @@ python Spherical.py -fasta -i $INPUT -velvet -bowtie2 -o $OUTPUT
 
 ```
 
+##Tutorial
+
+To ensure all the dependancies for Spherical are correctly installed and get you used to the various options of Spherical there is a test dataset.
+
+The test dataset consists of a Chicken cecum microbiome dataset obtained from MG-RAST (entry;101).
+
+```
+python Spherical.py -fasta -m -k 21 -R 1 -align 99 -iter 5 -i test_data.fa -velvet -bowtie2 -o test_assembly.fa
+
+```
+In this command we tell Spherical to produce an assembly using Velvet as the assembler and Bowtie2 as the aligner. The subsample size given of the  input data to Velvet is 1 which means the entire file is to be used. Velvet will use a kmer size of 21 and only finish once either the alignment rate reaches 99% or Spherical has completed 5 iterations of assembly. Finally we have also used the `-m` command to tell Spherical to combine the finished assemblies into a single file.
+
+This will produce an output assembly titled test_assembly.fa which when compared using the code below the value `0` should be returned.
+
+A value other than `0` inicates that you are using a different version of Velvet or Bowtie2.
+
+
 ###Options
 
 Full customisation of Spherical is possible using the commands below.

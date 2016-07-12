@@ -42,6 +42,8 @@ Full customisation of Spherical is possible using the commands below.
 | -fastq        | States that the input file is in FASTQ input                                                             | NA      |
 | -i  $FILE     | Identifies the input file                                                                                | NA      |
 | -o $FILE      | Identifies string to be used for output file                                                             | NA      |
+| -bowtie2      | Identifies Bowtie2 as the aligner of choice                                                              | NA      |
+| -velvet       | Identifies Velvet as the assembler of choice                                                             | NA      |
 
 
 

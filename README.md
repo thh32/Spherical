@@ -7,8 +7,8 @@ Spherical is an iterative approach to assembling metagenomic datasets. Spherical
 ##Requirements
 
 - Python 2.7
-- Velvet
-- Bowtie2
+- Velvet (tested using version 1.2.10)
+- Bowtie2 (tested using version 2.2.3)
 
 Python modules;
 - Numpy

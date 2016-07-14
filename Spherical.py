@@ -8,6 +8,7 @@ import numpy as np
 import subprocess
 import os
 import sys
+import datatime
 
 
 parser = argparse.ArgumentParser() #simplifys the wording of using argparse as stated in the python tutorial

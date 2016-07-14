@@ -81,7 +81,7 @@ if args.fastq_switch == True:
 	fastafile = open('Converted_input.fa','w')
 	for read in inputfile:
 		fastafile.write( ">" + read.name + '\n')
-		fastfile.write(read.seq + '\n')
+		fastafile.write(read.seq + '\n')
 	fastafile.close()
 	newinput = 'Converted_input.fa'
 

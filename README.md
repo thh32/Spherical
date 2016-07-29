@@ -1,8 +1,6 @@
 # Spherical
 
-Spherical is an iterative approach to assembling metagenomic datasets. Spherical has two uses; firstly the reducion of RAM usage as to allow metagenomic assemblies to be produced on computational infrastructure that would otherwise be insufficient, secondly Spherical allows for the assembly and study of low abundance varients otherwise hidden by the more common species.
-
-
+Spherical is an iterative approach to assembling metagenomic datasets. Spherical has been designed to produce a more complete assembly from deep sequenced metagenomic data. Utilization of multiple iterations of assembly allows for regions which otherwise would be missed to be assembled without a reduction in contig accuracy. Another use for Spherical is its ability to produce metagenomic assemblies using a subset of the initial input file, allowing for assembly of a metagenome whilst using a fraction of the RAM that would otherwise be required. 
 
 ##Requirements
 

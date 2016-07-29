@@ -41,7 +41,7 @@ This will produce an output assembly titled `test_assembly.combined.fa` which wh
 grep -F -x -v -f test_assembly.combined.fa provided_assembly.fa |grep '>'| wc -l
 ```
 
-A value other than `0` inicates that you are using a different version of Velvet or Bowtie2.
+A value other than `0` inicates that an error has occured during the assembly process leading to a difference between the assemblies. This is most likely due to the user using a different version of Velvet or Bowtie2.
 
 
 ###Options

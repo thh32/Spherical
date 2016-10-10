@@ -43,6 +43,8 @@ parser.add_argument('-iter', action='store', default= '5', dest='iterations', he
 parser.add_argument('-m', action='store_true', default=True, dest='merge_switch', help='Merges all contig files into a singluar assembly, default is true.')
 parser.add_argument('-k', action='store', default= '31', dest='kmer', help='Enter Kmer size of choice, default is 31.')
 parser.add_argument('-R', action='store', dest='RAM', help='Enter fraction of file to be used as sub-sample e.g. if -R 3 is used 1 third of the reads will be used in the sub-sample, no default')
+parser.add_argument("-x", type=str, action='store',default= ' ',  dest='extra', help="Allows additional options for assembly to be used in Velveth or ABYSS steps")
+
 
 args = parser.parse_args()
 
@@ -51,6 +53,7 @@ args = parser.parse_args()
 # Place each of the input into a simple variable to call
 INPUT = str(args.input)
 OUTPUT = str(args.output)
+EXTRA = str(args.extra)
 iterations = int(args.iterations)
 alignmentwanted = int(args.alignmentrate)
 ksize = str(args.kmer)
@@ -143,7 +146,7 @@ while currentiter < iterations:
 		# Run assembly
 		print "Starting Assembly; " + str(datetime.now())
 		if args.velvet_switch == True:
-			bashCommand = 'velveth out-dir ' + str(ksize) + ' -' + filetype + ' ' + currentfile + ' | cat >  Assembly_log'
+			bashCommand = 'velveth out-dir ' + str(ksize) + ' -' + filetype + ' ' + currentfile + ' ' + EXTRA + ' | cat >  Assembly_log'
 			notneeded = call(bashCommand, shell=True)
 			if limit == True:
 				bashCommand = 'velvetg out-dir -exp_cov auto -min_contig_lgth 300 | cat > Assembly_log'
@@ -155,7 +158,7 @@ while currentiter < iterations:
 
 		elif args.abyss_switch == True:
 			# Run ABYSS code
-			bashCommand = 'ABYSS -k' + str(ksize) +  ' ' + currentfile + ' -o temp_contigs.fa ' + ' | cat >  Assembly_log'
+			bashCommand = 'ABYSS -k' + str(ksize) +  ' ' + currentfile + ' -o temp_contigs.fa ' + ' ' + EXTRA + ' | cat >  Assembly_log'
 			notneeded = call(bashCommand, shell=True)
 
 
@@ -196,6 +199,19 @@ while currentiter < iterations:
 			elif args.abyss_switch == True:
 				bashCommand = 'mv temp_contigs.fa ' + contigfilename # Move file and rename so it isnt deleted
 				notneeded = call(bashCommand, shell=True)
+				if os.stat(contigfilename).st_size == 0:
+					print "Assembly failed to produce any contigs."
+					sys.stdout.flush()
+
+					print "Spherical will now exit."
+					sys.stdout.flush()
+
+					failed = True
+					bashCommand = 'rm ' + contigfilename
+					notneeded = call(bashCommand, shell=True)
+					if currentiter == 1:
+						failedfirst = True
+					break
 			bashCommand = 'bowtie2-build -f ' + contigfilename + ' ' + 'Current_round_index | cat > Index_log ' # Creates the bowtie index
 			notneeded = call(bashCommand, shell=True)
 			bashCommand = 'bowtie2 -f -N 1 --un Unaligned.fa.' + str(currentiter) + ' -U ' + unalignedfile + ' --al /dev/null -x Current_round_index -S /dev/null | cat > Alignment_log ' # Runs bowtie itself

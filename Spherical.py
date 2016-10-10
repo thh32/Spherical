@@ -29,7 +29,6 @@ parser.add_argument('-limit', action='store_true', default=False, dest='limit_sw
 
 # Choose assembler
 parser.add_argument('-velvet', action='store_true', default=False, dest='velvet_switch', help='Choose assembler Velvet')
-parser.add_argument('-soapdenovo', action='store_true', default=False, dest='soapdenovo_switch', help='Choose assembler SOAPdenovo')
 parser.add_argument('-abyss', action='store_true', default=False, dest='abyss_switch', help='Choose assembler ABYSS')
 
 
@@ -152,15 +151,13 @@ while currentiter < iterations:
 				bashCommand = 'velvetg out-dir -exp_cov auto | cat > Assembly_log'				
 			notneeded = call(bashCommand, shell=True)
 			# Run velvet code
-		elif args.soapdenovo_switch == True:
-			# Run soapdenovo code
-			print "Not yet available"
-			sys.stdout.flush()
+
 
 		elif args.abyss_switch == True:
 			# Run ABYSS code
-			print "not yet available"
-			sys.stdout.flush()
+			bashCommand = 'ABYSS -k' + str(ksize) + ' ' + filetype + ' -o ' + currentfile + ' | cat >  Assembly_log'
+			notneeded = call(bashCommand, shell=True)
+
 
 		print "Assembly complete."
 		sys.stdout.flush()

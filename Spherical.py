@@ -155,7 +155,7 @@ while currentiter < iterations:
 
 		elif args.abyss_switch == True:
 			# Run ABYSS code
-			bashCommand = 'ABYSS -k' + str(ksize) + ' ' + filetype + ' -o ' + currentfile + ' | cat >  Assembly_log'
+			bashCommand = 'ABYSS -k' + str(ksize) +  ' ' + currentfile + ' -o temp_contigs.fa ' + ' | cat >  Assembly_log'
 			notneeded = call(bashCommand, shell=True)
 
 
@@ -175,22 +175,27 @@ while currentiter < iterations:
 		sys.stdout.flush()
 
 		if args.bowtie_switch == True:
+
 			contigfilename = OUTPUT + '.' + str(currentiter)  
-			bashCommand = 'mv out-dir/contigs.fa ' + contigfilename # Move file and rename so it isnt deleted
-			notneeded = call(bashCommand, shell=True)
-			if os.stat(contigfilename).st_size == 0:
-				print "Assembly failed to produce any contigs."
-				sys.stdout.flush()
-
-				print "Spherical will now exit."
-				sys.stdout.flush()
-
-				failed = True
-				bashCommand = 'rm ' + contigfilename
+			if args.velvet_switch == True:
+				bashCommand = 'mv out-dir/contigs.fa ' + contigfilename # Move file and rename so it isnt deleted
 				notneeded = call(bashCommand, shell=True)
-				if currentiter == 1:
-					failedfirst = True
-				break
+				if os.stat(contigfilename).st_size == 0:
+					print "Assembly failed to produce any contigs."
+					sys.stdout.flush()
+
+					print "Spherical will now exit."
+					sys.stdout.flush()
+
+					failed = True
+					bashCommand = 'rm ' + contigfilename
+					notneeded = call(bashCommand, shell=True)
+					if currentiter == 1:
+						failedfirst = True
+					break
+			elif args.abyss_switch == True:
+				bashCommand = 'mv temp_contigs.fa ' + contigfilename # Move file and rename so it isnt deleted
+				notneeded = call(bashCommand, shell=True)
 			bashCommand = 'bowtie2-build -f ' + contigfilename + ' ' + 'Current_round_index | cat > Index_log ' # Creates the bowtie index
 			notneeded = call(bashCommand, shell=True)
 			bashCommand = 'bowtie2 -f -N 1 --un Unaligned.fa.' + str(currentiter) + ' -U ' + unalignedfile + ' --al /dev/null -x Current_round_index -S /dev/null | cat > Alignment_log ' # Runs bowtie itself

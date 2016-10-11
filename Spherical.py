@@ -44,6 +44,7 @@ parser.add_argument('-m', action='store_true', default=True, dest='merge_switch'
 parser.add_argument('-k', action='store', default= '31', dest='kmer', help='Enter Kmer size of choice, default is 31.')
 parser.add_argument('-R', action='store', dest='RAM', help='Enter fraction of file to be used as sub-sample e.g. if -R 3 is used 1 third of the reads will be used in the sub-sample, no default')
 parser.add_argument("-x", type=str, action='store',default= ' ',  dest='extra', help="Allows additional options for assembly to be used in Velveth or ABYSS steps")
+parser.add_argument("-u", type=str, action='store',default= ' ',  dest='bowtie_extra', help="Allows additional options for alignment to be used in Bowtie2")
 
 
 args = parser.parse_args()
@@ -54,6 +55,7 @@ args = parser.parse_args()
 INPUT = str(args.input)
 OUTPUT = str(args.output)
 EXTRA = str(args.extra)
+BOWTIE_EXTRA = str(args.bowtie_extra)
 iterations = int(args.iterations)
 alignmentwanted = int(args.alignmentrate)
 ksize = str(args.kmer)
@@ -214,7 +216,7 @@ while currentiter < iterations:
 					break
 			bashCommand = 'bowtie2-build -f ' + contigfilename + ' ' + 'Current_round_index | cat > Index_log ' # Creates the bowtie index
 			notneeded = call(bashCommand, shell=True)
-			bashCommand = 'bowtie2 -f -N 1 --un Unaligned.fa.' + str(currentiter) + ' -U ' + unalignedfile + ' --al /dev/null -x Current_round_index -S /dev/null | cat > Alignment_log ' # Runs bowtie itself
+			bashCommand = 'bowtie2 -f -N 1 --un Unaligned.fa.' + str(currentiter) + ' -U ' + unalignedfile + ' ' +  BOWTIE_EXTRA + ' --al /dev/null -x Current_round_index -S /dev/null | cat > Alignment_log ' # Runs bowtie itself
 			notneeded = call(bashCommand, shell=True)
 			unalignedfile = 'Unaligned.fa.' + str(currentiter)
 			# Run bowtie code

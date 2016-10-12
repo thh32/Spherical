@@ -45,6 +45,7 @@ parser.add_argument('-k', action='store', default= '31', dest='kmer', help='Ente
 parser.add_argument('-R', action='store', dest='RAM', help='Enter fraction of file to be used as sub-sample e.g. if -R 3 is used 1 third of the reads will be used in the sub-sample, no default')
 parser.add_argument("-x", type=str, action='store',default= ' ',  dest='extra', help="Allows additional options for assembly to be used in Velveth or ABYSS steps")
 parser.add_argument("-u", type=str, action='store',default= ' ',  dest='bowtie_extra', help="Allows additional options for alignment to be used in Bowtie2")
+parser.add_argument('-f', action='store_true', default=True, dest='scaffold_switch', help='Conducts a final assembly of the produced contigs.')
 
 
 args = parser.parse_args()
@@ -270,6 +271,86 @@ if failedfirst == False:
 		print "Final alignment rate; ", alignmentrate
 		print '\n'
 		sys.stdout.flush()
+
+
+
+
+
+	if args.scaffold_switch == True:
+		print "Starting Scaffold step; " + str(datetime.now())
+		if args.velvet_switch == True:
+			bashCommand = 'velveth out-dir ' + str(ksize) + ' -' + filetype + ' ' + '*.combined.fa' + ' ' + EXTRA + ' | cat >  Assembly_log'
+			notneeded = call(bashCommand, shell=True)
+			if limit == True:
+				bashCommand = 'velvetg out-dir -exp_cov auto -min_contig_lgth 300 | cat > Assembly_log'
+			else:
+				bashCommand = 'velvetg out-dir -exp_cov auto | cat > Assembly_log'				
+			notneeded = call(bashCommand, shell=True)
+			# Run velvet code
+
+
+		elif args.abyss_switch == True:
+			# Run ABYSS code
+			bashCommand = 'ABYSS -k' + str(ksize) +  ' ' + currentfile + ' -o temp_contigs.fa ' + ' ' + EXTRA + ' | cat >  Assembly_log'
+			notneeded = call(bashCommand, shell=True)
+
+
+		print "Scaffold complete."
+		sys.stdout.flush()
+
+		print "Ending Scaffold; " + str(datetime.now())
+		sys.stdout.flush()
+
+		# Run alignment
+		print "Starting Alignment; " + str(datetime.now())
+		sys.stdout.flush()
+
+		if args.bowtie_switch == True:
+
+			contigfilename = OUTPUT + '.' + 'scaffold.fa'  
+			if args.velvet_switch == True:
+				bashCommand = 'mv out-dir/contigs.fa ' + contigfilename # Move file and rename so it isnt deleted
+				notneeded = call(bashCommand, shell=True)
+				if os.stat(contigfilename).st_size == 0:
+					print "Scaffold failed to produce any contigs."
+					sys.stdout.flush()
+
+					print "Spherical will now exit."
+					sys.stdout.flush()
+
+					failed = True
+					bashCommand = 'rm ' + contigfilename
+					notneeded = call(bashCommand, shell=True)
+					if currentiter == 1:
+						failedfirst = True
+					break
+			elif args.abyss_switch == True:
+				bashCommand = 'mv temp_contigs.fa ' + contigfilename # Move file and rename so it isnt deleted
+				notneeded = call(bashCommand, shell=True)
+				if os.stat(contigfilename).st_size == 0:
+					print "Assembly failed to produce any contigs."
+					sys.stdout.flush()
+
+					print "Spherical will now exit."
+					sys.stdout.flush()
+
+					failed = True
+					bashCommand = 'rm ' + contigfilename
+					notneeded = call(bashCommand, shell=True)
+					if currentiter == 1:
+						failedfirst = True
+					break
+			bashCommand = 'bowtie2-build -f ' + contigfilename + ' ' + 'Current_round_index | cat > Index_log ' # Creates the bowtie index
+			notneeded = call(bashCommand, shell=True)
+			bashCommand = 'bowtie2 -f -N 1 --un Non_scaffolded_contigs.fa '   +  BOWTIE_EXTRA + ' --al Scaffolded_contigs.fa -x Current_round_index -S /dev/null | cat > Alignment_log ' # Runs bowtie itself
+			notneeded = call(bashCommand, shell=True)
+
+
+			print "Ending Scaffold alignment; " + str(datetime.now())
+			sys.stdout.flush()
+
+
+
 
 
 	# Provide final statistics on every round

@@ -53,7 +53,7 @@ Full customisation of Spherical is possible using the commands below.
 |-align $INT    | Identifies an alignment rate that must be obtained before Spherical stops producing iterations           | 70      |
 | -iter $INT    | States the number of iterations that must be produced                                                    | 5       |
 | -k $INT       | Sets the Kmer size which should be used for each assembly                                                | 31      |
-| -R $INT       | States the fraction of the input which should be used in each iteration of assembly                      | NA      |
+| -R $FLOAT     | States the input size which should be used in each iteration of assembly e.g. -R 0.25 = 25% of reads     | NA      |
 | -limit        | A switch which prevents contigs smaller from 300bp from being produced                                   | NA      |
 | -m            | A switch which activates the combination of all iterations assemblies at the end to produce a final file | NA      |
 | -fasta        | States that the input file is in FASTA input                                                             | NA      |

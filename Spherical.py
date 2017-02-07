@@ -42,7 +42,7 @@ parser.add_argument('-align', action='store', default= '70', dest='alignmentrate
 parser.add_argument('-iter', action='store', default= '5', dest='iterations', help='Number of iterations before ending, default is 5.')
 parser.add_argument('-m', action='store_true', default=True, dest='merge_switch', help='Merges all contig files into a singluar assembly, default is true.')
 parser.add_argument('-k', action='store', default= '31', dest='kmer', help='Enter Kmer size of choice, default is 31.')
-parser.add_argument('-R', action='store', dest='RAM', help='Enter fraction of file to be used as sub-sample e.g. if -R 3 is used 1 third of the reads will be used in the sub-sample, no default')
+parser.add_argument('-R', action='store', dest='RAM', help='Enter percentage of file to be used as sub-sample e.g. if -R 0.35 is used  25% of the reads will be used in the sub-sample, no default')
 parser.add_argument("-x", type=str, action='store',default= ' ',  dest='extra', help="Allows additional options for assembly to be used in Velveth or ABYSS steps")
 parser.add_argument("-u", type=str, action='store',default= ' ',  dest='bowtie_extra', help="Allows additional options for alignment to be used in Bowtie2")
 parser.add_argument('-f', action='store_true', default=True, dest='scaffold_switch', help='Conducts a final assembly of the produced contigs.')
@@ -60,7 +60,7 @@ BOWTIE_EXTRA = str(args.bowtie_extra)
 iterations = int(args.iterations)
 alignmentwanted = int(args.alignmentrate)
 ksize = str(args.kmer)
-RAM = int(args.RAM)
+RAM = float(args.RAM)
 
 
 limit = False
@@ -113,8 +113,7 @@ for read in HTSeq.FastaReader(currentfile):
 currentiter = 0
 
 unalignedfile = currentfile
-
-RAM = int(RAM) -1
+RAM2 = RAM*100
 
 while currentiter < iterations:
 	if currentalignrate >= alignmentwanted:
@@ -130,8 +129,8 @@ while currentiter < iterations:
 		currentfasta = HTSeq.FastaReader(unalignedfile)
 		#print RAM
 		for read in currentfasta:
-			random_num = random.randint(0,RAM)
-			if int(random_num % 5 ) == 0:
+			random_num = random.randint(0,100)
+			if RAM2 >= random_num:
 				subsample.write('>' + read.name + '\n')
 				subsample.write(read.seq + '\n')
 			else:

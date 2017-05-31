@@ -46,6 +46,7 @@ A value other than `0` inicates that an error has occured during the assembly pr
 
 ### Options
 
+
 Full customisation of Spherical is possible using the commands below.
 
 | Option command| Description                                                                                              | Default |

@@ -2,7 +2,7 @@
 
 Spherical is an iterative approach to assembling metagenomic datasets. Spherical has been designed to produce a more complete assembly from deep sequenced metagenomic data. Utilization of multiple iterations of assembly allows for regions which otherwise would be missed to be assembled without a reduction in contig accuracy. Another use for Spherical is its ability to produce metagenomic assemblies using a subset of the initial input file, allowing for assembly of a metagenome whilst using a fraction of the RAM that would otherwise be required. 
 
-##Requirements
+## Requirements
 
 - Python 2.7
 - Velvet (tested using version 1.2.10)
@@ -14,7 +14,7 @@ Python modules;
 
 
 
-##Usage
+## Usage
 
 Once all dependancies are install and Spherical has been downloaded you can begin using Spherical from command line.
 
@@ -24,7 +24,7 @@ python Spherical.py -fasta -i $INPUT -velvet -bowtie2 -o $OUTPUT
 
 ```
 
-##Tutorial
+## Tutorial
 
 To ensure all the dependancies for Spherical are correctly installed and get you used to the various options of Spherical there is a test dataset.
 
@@ -44,7 +44,7 @@ grep -F -x -v -f test_assembly.combined.fa provided_assembly.fa |grep '>'| wc -l
 A value other than `0` inicates that an error has occured during the assembly process leading to a difference between the assemblies. This is most likely due to the user using a different version of Velvet or Bowtie2.
 
 
-###Options
+### Options
 
 Full customisation of Spherical is possible using the commands below.
 

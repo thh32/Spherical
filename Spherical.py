@@ -197,7 +197,7 @@ while currentiter < iterations:
 					notneeded = call(bashCommand, shell=True)
 					if currentiter == 1:
 						failedfirst = True
-					break
+					sys.exit()
 			elif args.abyss_switch == True:
 				bashCommand = 'mv temp_contigs.fa ' + contigfilename # Move file and rename so it isnt deleted
 				notneeded = call(bashCommand, shell=True)
@@ -213,7 +213,7 @@ while currentiter < iterations:
 					notneeded = call(bashCommand, shell=True)
 					if currentiter == 1:
 						failedfirst = True
-					break
+					sys.exit()
 			bashCommand = 'bowtie2-build -f ' + contigfilename + ' ' + 'Current_round_index | cat > Index_log ' # Creates the bowtie index
 			notneeded = call(bashCommand, shell=True)
 			bashCommand = 'bowtie2 -f -N 1 --un Unaligned.fa.' + str(currentiter) + ' -U ' + unalignedfile + ' ' +  BOWTIE_EXTRA + ' --al /dev/null -x Current_round_index -S /dev/null | cat > Alignment_log ' # Runs bowtie itself
@@ -322,7 +322,7 @@ if failedfirst == False:
 					notneeded = call(bashCommand, shell=True)
 					if currentiter == 1:
 						failedfirst = True
-					break
+					sys.exit()
 			elif args.abyss_switch == True:
 				bashCommand = 'mv temp_contigs.fa ' + contigfilename # Move file and rename so it isnt deleted
 				notneeded = call(bashCommand, shell=True)
@@ -338,7 +338,7 @@ if failedfirst == False:
 					notneeded = call(bashCommand, shell=True)
 					if currentiter == 1:
 						failedfirst = True
-					break
+					sys.exit()
 			bashCommand = 'bowtie2-build -f ' + contigfilename + ' ' + 'Current_round_index | cat > Index_log ' # Creates the bowtie index
 			notneeded = call(bashCommand, shell=True)
 			bashCommand = 'bowtie2 -f -N 1 --un Non_scaffolded_contigs.fa '   +  BOWTIE_EXTRA + ' --al Scaffolded_contigs.fa -x Current_round_index -S /dev/null | cat > Alignment_log ' # Runs bowtie itself
@@ -378,7 +378,4 @@ else:
 	print "Spherical failed with no successful assembly produced."
 	print "Please try again with a different kmer size."
 	sys.stdout.flush()
-
-
-
 

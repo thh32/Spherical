@@ -30,6 +30,7 @@ parser.add_argument('-limit', action='store_true', default=False, dest='limit_sw
 # Choose assembler
 parser.add_argument('-velvet', action='store_true', default=False, dest='velvet_switch', help='Choose assembler Velvet')
 parser.add_argument('-abyss', action='store_true', default=False, dest='abyss_switch', help='Choose assembler ABYSS')
+parser.add_argument('-megahit', action='store_true', default=False, dest='megahit_switch', help='Choose assembler Megahit')
 
 
 # Choose aligner
@@ -42,7 +43,7 @@ parser.add_argument('-align', action='store', default= '70', dest='alignmentrate
 parser.add_argument('-iter', action='store', default= '5', dest='iterations', help='Number of iterations before ending, default is 5.')
 parser.add_argument('-m', action='store_true', default=True, dest='merge_switch', help='Merges all contig files into a singluar assembly, default is true.')
 parser.add_argument('-k', action='store', default= '31', dest='kmer', help='Enter Kmer size of choice, default is 31.')
-parser.add_argument('-R', action='store', dest='RAM', help='Enter percentage of file to be used as sub-sample e.g. if -R 0.35 is used  25% of the reads will be used in the sub-sample, no default')
+parser.add_argument('-R', action='store', dest='RAM', help='Enter percentage of file to be used as sub-sample e.g. if -R 0.25 is used  25% of the reads will be used in the sub-sample, no default')
 parser.add_argument("-x", type=str, action='store',default= ' ',  dest='extra', help="Allows additional options for assembly to be used in Velveth or ABYSS steps")
 parser.add_argument("-u", type=str, action='store',default= ' ',  dest='bowtie_extra', help="Allows additional options for alignment to be used in Bowtie2")
 parser.add_argument('-f', action='store_true', default=True, dest='scaffold_switch', help='Conducts a final assembly of the produced contigs.')
@@ -163,7 +164,13 @@ while currentiter < iterations:
 			bashCommand = 'ABYSS -k' + str(ksize) +  ' ' + currentfile + ' -o temp_contigs.fa ' + ' ' + EXTRA + ' | cat >  Assembly_log'
 			notneeded = call(bashCommand, shell=True)
 
-
+		elif args.megahit_switch == True:
+			# Run Megahit code
+			contigfilename = OUTPUT + '.' + str(currentiter) 
+			bashCommand = 'megahit ' + ' -r ' + currentfile + ' -o Iteration_' + str(currentiter) + ' ' + EXTRA + ' | cat >  Assembly_log'
+			notneeded = call(bashCommand, shell=True)
+			bashCommand = 'cp Iteration_' + str(currentiter) + '/final.contigs.fa ' + contigfilename
+			notneeded = call(bashCommand, shell=True)
 		print "Assembly complete."
 		sys.stdout.flush()
 
@@ -214,6 +221,7 @@ while currentiter < iterations:
 					if currentiter == 1:
 						failedfirst = True
 					sys.exit()
+			
 			bashCommand = 'bowtie2-build -f ' + contigfilename + ' ' + 'Current_round_index | cat > Index_log ' # Creates the bowtie index
 			notneeded = call(bashCommand, shell=True)
 			bashCommand = 'bowtie2 -f -N 1 --un Unaligned.fa.' + str(currentiter) + ' -U ' + unalignedfile + ' ' +  BOWTIE_EXTRA + ' --al /dev/null -x Current_round_index -S /dev/null | cat > Alignment_log ' # Runs bowtie itself
@@ -293,6 +301,8 @@ if failedfirst == False:
 			bashCommand = 'ABYSS -k' + str(ksize) +  ' ' + currentfile + ' -o temp_contigs.fa ' + ' ' + EXTRA + ' | cat >  Assembly_log'
 			notneeded = call(bashCommand, shell=True)
 
+		elif args.megahit_switch == True:
+			print "Scaffoling is not avaialble for Megahit" 
 
 		print "Scaffold complete."
 		sys.stdout.flush()
@@ -339,6 +349,10 @@ if failedfirst == False:
 					if currentiter == 1:
 						failedfirst = True
 					sys.exit()
+
+
+			elif args.abyss_switch == True:
+				print "Scaffolding not available, no alignment conducted. Program will now likely crash due to bad programming. Sorry."
 			bashCommand = 'bowtie2-build -f ' + contigfilename + ' ' + 'Current_round_index | cat > Index_log ' # Creates the bowtie index
 			notneeded = call(bashCommand, shell=True)
 			bashCommand = 'bowtie2 -f -N 1 --un Non_scaffolded_contigs.fa '   +  BOWTIE_EXTRA + ' --al Scaffolded_contigs.fa -x Current_round_index -S /dev/null | cat > Alignment_log ' # Runs bowtie itself
@@ -378,4 +392,3 @@ else:
 	print "Spherical failed with no successful assembly produced."
 	print "Please try again with a different kmer size."
 	sys.stdout.flush()
-

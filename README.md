@@ -62,9 +62,9 @@ Full customisation of Spherical is possible using the commands below.
 | -i  $FILE     | Identifies the input file                                                                                | NA      |
 | -o $FILE      | Identifies string to be used for output file                                                             | NA      |
 | -bowtie2      | Identifies Bowtie2 as the aligner of choice                                                              | NA      |
-| -velvet       | Identifies Velvet as the assembler of choice                                                             | NA      |  Allows additional options for assembly to be used in Velveth or ABYSS steps, used for options starting with '-'
-| -x1  $STRING     | Allows additional options for assembly to be used in Velveth or ABYSS steps, used for options starting with '--'                                                                                | NA      |
-| -x2  $STRING     | Identifies the input file                                                                                | NA      |
+| -velvet       | Identifies Velvet as the assembler of choice                                                             | NA      | 
+| -x1  $STRING     | Allows additional options for assembly to be used in Velveth or ABYSS steps, used for options starting with '-'                                                                                | NA      |
+| -x2  $STRING     | Allows additional options for assembly to be used in Velveth or ABYSS steps, used for options starting with '--'                                                                                | NA      |
 
 
 

@@ -44,8 +44,8 @@ parser.add_argument('-iter', action='store', default= '5', dest='iterations', he
 parser.add_argument('-m', action='store_true', default=True, dest='merge_switch', help='Merges all contig files into a singluar assembly, default is true.')
 parser.add_argument('-k', action='store', default= '31', dest='kmer', help='Enter Kmer size of choice, default is 31.')
 parser.add_argument('-R', action='store', dest='RAM', help='Enter percentage of file to be used as sub-sample e.g. if -R 0.25 is used  25% of the reads will be used in the sub-sample, no default')
-parser.add_argument("-x1", type=str, action='store',default= ' ',  dest='extra1', help="Allows additional options for assembly to be used in Velveth or ABYSS steps, used for options starting with '-'")
-parser.add_argument("-x2", type=str, action='store',default= ' ',  dest='extra2', help="Allows additional options for assembly to be used in Velveth or ABYSS steps, used for options starting with '--'")
+parser.add_argument("-x1", type=str, action='store',default= '',  dest='extra1', help="Allows additional options for assembly to be used in Velveth or ABYSS steps, used for options starting with '-'")
+parser.add_argument("-x2", type=str, action='store',default= '',  dest='extra2', help="Allows additional options for assembly to be used in Velveth or ABYSS steps, used for options starting with '--'")
 parser.add_argument("-u", type=str, action='store',default= ' ',  dest='bowtie_extra', help="Allows additional options for alignment to be used in Bowtie2")
 parser.add_argument('-f', action='store_true', default=False, dest='scaffold_switch', help='Conducts a final assembly of the produced contigs.')
 
@@ -70,7 +70,7 @@ EXTRA = ''
 temp = ''
 if EXTRA1 != '':
 	temp = EXTRA + '-' + EXTRA1
-if EXTRA1 != '':
+if EXTRA2 != '':
 	EXTRA = temp + ' --' + EXTRA2
 	
 

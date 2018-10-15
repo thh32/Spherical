@@ -63,11 +63,15 @@ alignmentwanted = int(args.alignmentrate)
 ksize = str(args.kmer)
 RAM = float(args.RAM)
 
+scaffold_switch = False
+if  args.scaffold_switch == True:
+	scaffold_switch = True
 
 limit = False
 if args.limit_switch == True:
 	limit = True
 
+	
 
 # Provide an initial count of the raw reads so we can work out the alignment rate
 totalreads = 0
